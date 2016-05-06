@@ -14,10 +14,19 @@ module Robot where
                         let updateActionQueue q = q { actionQueue = newQueue} in
                             updateActionQueue s
 
-  getNextAction :: State -> Action
+  popAction :: State -> (Maybe Action, State)
+  popAction s = (getNextAction s, removeTopAction s)
+
+  getNextAction :: State -> Maybe Action
   getNextAction s = let actionList = (actionQueue s) in
-                      head actionList
+                      case actionList of
+                        [] -> Nothing
+                        _  -> Just (head actionList)
+
 
   removeTopAction :: State -> State
-  removeTopAction s = let updateActionQueue q = q { actionQueue = tail (actionQueue s)} in
-      updateActionQueue s
+  removeTopAction s = let actionList = (actionQueue s) in
+                          case actionList of
+                            [] -> s
+                            _  -> let updateActionQueue q = q { actionQueue = tail (actionQueue s)} in
+                              updateActionQueue s
