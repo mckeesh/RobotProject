@@ -9,8 +9,15 @@ module Robot where
   --addAction MoveBack s2
   addAction :: Action -> State -> State
   addAction a s = let newQueue = (actionQueue s) ++ [a] in
-                        let updateActionQueue q = q { actionQueue = newQueue} in
+                        let updateActionQueue oldstate = oldstate { actionQueue = newQueue} in
                             updateActionQueue s
 
   popAction :: State -> (Maybe Action, State)
   popAction s = (getNextAction s, removeTopAction s)
+
+  setTemp :: Int -> State -> State
+  setTemp i s = let updateTemp oldstate = oldstate { currentTemp = i } in
+                  updateTemp s
+
+  getTemp :: State -> Int
+  getTemp s = currentTemp s 
